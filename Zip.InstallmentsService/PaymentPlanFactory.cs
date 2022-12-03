@@ -47,13 +47,13 @@ namespace Zip.InstallmentsService
             return new PaymentPlan() { Installments=installments,PurchaseAmount=request.Amount};
         }
 
-        private DateTime CalculateDueDate(FrequencyType frequencyType,int Frequency)
+        private DateTime CalculateDueDate(FrequencyTypes frequencyType,int Frequency)
         {
             switch (frequencyType)
             {
-                case FrequencyType.Monthaly:
+                case FrequencyTypes.Monthaly:
                     return DateTime.Now.AddMonths(Frequency).Date;
-                case FrequencyType.Day:
+                case FrequencyTypes.Day:
                     return DateTime.Now.AddDays(Frequency).Date;
                 default:
                     return DateTime.Now.Date;

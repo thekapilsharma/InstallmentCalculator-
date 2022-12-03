@@ -16,7 +16,7 @@ namespace Zip.InstallmentsService.Test
             {
                 Amount =100,
                 Frequency =14,
-                FrequencyType = FrequencyType.Day,
+                FrequencyType = FrequencyTypes.Day,
                 NoOfInstallments=4
             };
             // Act

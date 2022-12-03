@@ -1,5 +1,7 @@
 ﻿
 
+using System.ComponentModel.DataAnnotations;
+
 namespace Zip.InstallmentsModel
 {
     /// <summary>
@@ -18,7 +20,7 @@ namespace Zip.InstallmentsModel
         /// <summary>
         /// Installment Frequency Type
         /// </summary>
-        public FrequencyType FrequencyType { get; set; }
+        public FrequencyTypes FrequencyType { get; set; }
         /// <summary>
         /// No Of Installments
         /// </summary>

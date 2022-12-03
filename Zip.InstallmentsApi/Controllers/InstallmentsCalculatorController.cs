@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation.Results;
+using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
+using Zip.InstallmentsApi.Validator;
 using Zip.InstallmentsContract.Services;
 using Zip.InstallmentsModel;
 
@@ -10,9 +12,11 @@ namespace Zip.InstallmentsApi.Controllers
     public class InstallmentsCalculatorController : ControllerBase
     {
         private readonly IPaymentPlanFactory _paymentPlanFactory;
-        public InstallmentsCalculatorController(IPaymentPlanFactory paymentPlanFactory)
+        private readonly ILogger _logger;
+        public InstallmentsCalculatorController(IPaymentPlanFactory paymentPlanFactory, ILogger logger)
         {
             _paymentPlanFactory= paymentPlanFactory;
+            _logger= logger;
         }
 
         /// <summary>
@@ -24,15 +28,23 @@ namespace Zip.InstallmentsApi.Controllers
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult CreatInstallments([FromBody]InstallmentRequest request)
+        public ActionResult CreatInstallments([FromBody]InstallmentRequest request)
         {
+            _logger.LogInformation("Installment request received for",request);
             //This can be replaced with fluent validation or any other validation process.
-            if(request.NoOfInstallments==0 || request.Frequency == 0)
+            InstallmentRequestValidator installmentRequestValidator = new InstallmentRequestValidator();
+            ValidationResult validationResult = installmentRequestValidator.Validate(request);
+
+            if(!validationResult.IsValid)
             {
-                return BadRequest();
+                _logger.LogError("Installment request failed for", request);
+
+                return BadRequest(validationResult.Errors.Select(x=>x.ErrorMessage));
             }
 
             var result = _paymentPlanFactory.CreatePaymentPlan(request);
+            _logger.LogInformation("Installment request completed for", request);
+
             return Ok(result);
         }
     }
