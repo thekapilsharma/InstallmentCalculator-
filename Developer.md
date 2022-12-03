@@ -19,7 +19,8 @@ API edppoint is deined in API project for calulating installments. It has Freque
 ```
 Unit test are defined in ZIP.InstallmentsServices.Test project. Controller related UTC are inside Controller forlder. Also for Integration test we have Swagger configured and we cna use postman collection as well.
 ```
-
+## Logging
+Logging is defined by using ILogger interface on diffrent levels
 
 ## Application layer details
 
